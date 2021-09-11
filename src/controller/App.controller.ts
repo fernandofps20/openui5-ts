@@ -1,11 +1,11 @@
 import MessageBox from "sap/m/MessageBox";
-import Controller from "sap/ui/core/mvc/Controller";
 import AppComponent from "../Component";
+import BaseController from "./BaseController";
 
 /**
  * @namespace com.myorg.myapp.controller
  */
-export default class AppController extends Controller {
+export default class AppController extends BaseController {
 
 	public onInit() : void {
 		// apply content density mode to root view
