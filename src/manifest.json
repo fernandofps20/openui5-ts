@@ -15,7 +15,12 @@
 	"sap.ui": {
 		"technology": "UI5",
 		"icons": {
-
+			"icon": "",
+            "favIcon": "",
+            "phone": "",
+            "phone@2": "",
+            "tablet": "",
+            "tablet@2": ""
 		},
 		"deviceTypes": {
 			"desktop": true,
@@ -29,9 +34,8 @@
 			"viewName": "com.myorg.myapp.view.App",
 			"type": "XML",
 			"async": true,
-			"id": "app"
+			"id": "App"
 		},
-
 		"dependencies": {
 			"minUI5Version": "1.90.1",
 			"libs": {
@@ -41,14 +45,11 @@
 				"sap.m": {}
 			}
 		},
-
 		"handleValidation": true,
-
 		"contentDensities": {
 			"compact": true,
 			"cozy": true
 		},
-
 		"models": {
 			"i18n": {
 				"type": "sap.ui.model.resource.ResourceModel",
@@ -57,9 +58,29 @@
 				}
 			}
 		},
-
+		"resources": {
+            "css": [
+                {
+                    "uri": "css/style.css"
+                }
+            ]
+        },
 		"routing": {
-			
+			"config": {
+                "routerClass": "sap.m.routing.Router",
+                "viewType": "XML",
+                "async": true,
+                "viewPath": "com.myorg.myapp.view",
+                "controlAggregation": "pages",
+                "controlId": "app",
+                "clearControlAggregation": false
+            },
+			"routes": [
+
+            ],
+            "targets": {
+
+            }
 		}
 	}
 }
