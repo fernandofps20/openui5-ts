@@ -148,10 +148,12 @@ export default class BaseController extends Controller {
         }
         var id: string = this.getView().getId() + "-" + sName;
         if (_fragments[id] != undefined) {
+            
             //create controller
             var sControllerPath = sViewPath.replace("view", "controller");
+            let controller: any;
             try {
-                var controller = Controller.extend(sControllerPath + sName);
+                controller = Controller.extend(sControllerPath + sName);
             } catch (ex) {
                 controller = this;
             }
