@@ -24,7 +24,7 @@ export default class BaseObject extends Object {
         }
     }
 
-    getData() {
+    getData(): {} {
         const req = jQuery.extend({}, this);
         delete req["model"];
         return req;

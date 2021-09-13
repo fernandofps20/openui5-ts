@@ -1,11 +1,14 @@
 import BusyIndicator from "sap/ui/core/BusyIndicator";
 import EventBus from "sap/ui/core/EventBus";
+import Fragment from "sap/ui/core/Fragment";
 import Controller from "sap/ui/core/mvc/Controller";
 import View from "sap/ui/core/mvc/View";
 import History from "sap/ui/core/routing/History";
 import JSONModel from "sap/ui/model/json/JSONModel";
 import ResourceModel from "sap/ui/model/resource/ResourceModel";
 import AppComponent from "../Component";
+
+let _fragments : any;
 
 /**
  * @namespace com.myorg.myapp.controller
@@ -19,7 +22,7 @@ export default class BaseController extends Controller {
 
         super("com.myorg.myapp.controller.BaseController");
     }
-    public onInit(): void {}
+    public onInit(): void { }
 
     public getOwnerAppComponent(): AppComponent {
         // this double cast is weired but is documented here: https://basarat.gitbooks.io/typescript/docs/types/type-assertion.html
@@ -28,11 +31,11 @@ export default class BaseController extends Controller {
     }
 
     /**
-         * get the Router for this view
-         *
-         * @returns {*}
-         * @memberof BaseController
-         */
+    * get the Router for this view
+    *
+    * @returns {*}
+    * @memberof BaseController
+    */
     getRouter(): any {
         return AppComponent.getRouterFor(this);
     }
@@ -42,25 +45,25 @@ export default class BaseController extends Controller {
     }
 
     getModel(sName?: string): JSONModel {
-        if(sName) {
+        if (sName) {
             return <JSONModel>this.getView().getModel(sName);
         } else {
             return <JSONModel>this.getView().getModel();
         }
     }
 
-		/**
-		 * Convenience method for setting the view model in every controller of the application.
-		 * @public
-		 * @param {sap.ui.model.Model} oModel the model instance
-		 * @param {string} sName the model name
-		 * @returns {sap.ui.mvc.View} the view instance
-		 */
+    /**
+     * Convenience method for setting the view model in every controller of the application.
+     * @public
+     * @param {sap.ui.model.Model} oModel the model instance
+     * @param {string} sName the model name
+     * @returns {sap.ui.mvc.View} the view instance
+     */
     setModel(oModel: JSONModel, sName: string): View {
         return this.getView().setModel(oModel, sName);
     }
 
-    getResourceBundle(){
+    getResourceBundle() {
         return (<ResourceModel>this.getOwnerAppComponent().getModel("i18n")).getResourceBundle();
     }
 
@@ -74,11 +77,11 @@ export default class BaseController extends Controller {
         }
     }
 
-    showBusyIndicator() {
+    showBusyIndicator(): void {
         return BusyIndicator.show();
     }
 
-    hideBusyIndicator() {
+    hideBusyIndicator(): void {
         return BusyIndicator.hide();
     }
 
@@ -129,7 +132,7 @@ export default class BaseController extends Controller {
         dialog.open();
     }*/
 
-    /*openFragment(sName: string, model: JSONModel, updateModelAlways: any, callback: any, data: any) {
+    openFragment(sName: string, model: JSONModel, updateModelAlways: any, callback: any, data: any) {
         if (sName.indexOf(".") > 0) {
             var aViewName = sName.split(".");
             sName = sName.substr(sName.lastIndexOf(".") + 1);
@@ -143,26 +146,42 @@ export default class BaseController extends Controller {
         } else {
             sViewPath += ".fragments.";
         }
-        var id = this.getView().getId() + "-" + sName;
-        if (!_fragments[id]) {
+        var id: string = this.getView().getId() + "-" + sName;
+        if (_fragments[id] != undefined) {
             //create controller
             var sControllerPath = sViewPath.replace("view", "controller");
             try {
-                var controller = sap.ui.controller(sControllerPath + sName);
+                var controller = Controller.extend(sControllerPath + sName);
             } catch (ex) {
                 controller = this;
             }
+
+            // _fragments[id] = {
+            //     fragment: sap.ui.xmlfragment(
+            //         id,
+            //         sViewPath + sName,
+            //         controller
+            //     ),
+            //     controller: controller
+            // };
+
+
+
             _fragments[id] = {
-                fragment: sap.ui.xmlfragment(
-                    id,
-                    sViewPath + sName,
-                    controller
-                ),
+                fragment: Fragment.load({
+                    id: id,
+                    name: sViewPath + sName,
+                    controller: controller
+                }),
                 controller: controller
             };
+
+
+
             if (model && !updateModelAlways) {
                 _fragments[id].fragment.setModel(model);
             }
+
             // version >= 1.20.x
             this.getView().addDependent(_fragments[id].fragment);
         }
@@ -187,7 +206,7 @@ export default class BaseController extends Controller {
         }
     }
 
-    getFragmentControlById(parent, id) {
+    /*getFragmentControlById(parent, id) {
         var latest = this.getMetadata().getName().split(".")[this.getMetadata().getName().split(".").length - 1];
         return sap.ui.getCore().byId(parent.getView().getId() + "-" + latest + "--" + id);
     }*/
