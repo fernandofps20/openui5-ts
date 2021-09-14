@@ -1,3 +1,4 @@
+import ResourceBundle from "sap/base/i18n/ResourceBundle";
 import BusyIndicator from "sap/ui/core/BusyIndicator";
 import EventBus from "sap/ui/core/EventBus";
 import Fragment from "sap/ui/core/Fragment";
@@ -77,13 +78,13 @@ export default class BaseController extends Controller {
         return this.getView().setModel(oModel, sName);
     }
 
-    getResourceBundle() {
-        return (<ResourceModel>this.getOwnerAppComponent().getModel("i18n")).getResourceBundle();
+    async getResourceBundle(): Promise<ResourceBundle> {
+        return await (<ResourceModel>this.getOwnerAppComponent().getModel("i18n")).getResourceBundle();
     }
 
-    /*i18n(sProperty: string) {
-        return this.getResourceBundle().getText(sProperty);
-    }*/
+    async i18n(sProperty: string) {
+        return (await this.getResourceBundle()).getText(sProperty);
+    }
 
     onNavBack(): void {
         const sPreviousHash = History.getInstance().getPreviousHash();
