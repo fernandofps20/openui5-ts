@@ -76,10 +76,30 @@
                 "clearControlAggregation": false
             },
 			"routes": [
-
-            ],
+				{
+					"name": "RouteApp",
+					"pattern": "RouteApp",
+					"target": ["TargetApp"]
+				},
+				{
+					"name": "NextView",
+					"pattern": "NextView",
+					"target": ["NextView"]
+				}
+			],
             "targets": {
-
+				"TargetApp": {
+					"viewType": "XML",
+					"transition": "slide",
+					"viewId": "App",
+					"viewName": "App"
+				},
+				"NextView": {
+					"viewType": "XML",
+					"transition": "slide",
+					"viewId": "NextView",
+					"viewName": "NextView"
+				}
             }
 		}
 	}

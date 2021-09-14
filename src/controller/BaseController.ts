@@ -7,8 +7,9 @@ import History from "sap/ui/core/routing/History";
 import JSONModel from "sap/ui/model/json/JSONModel";
 import ResourceModel from "sap/ui/model/resource/ResourceModel";
 import AppComponent from "../Component";
+import formatter from "../model/formatter";
 
-let _fragments : any;
+let _fragments : any = [];
 
 /**
  * @namespace com.myorg.myapp.controller
@@ -22,6 +23,11 @@ export default class BaseController extends Controller {
 
         super("com.myorg.myapp.controller.BaseController");
     }
+
+    formatter(): typeof formatter { 
+        return formatter;
+    }
+    
     public onInit(): void { }
 
     public getOwnerAppComponent(): AppComponent {
@@ -37,19 +43,27 @@ export default class BaseController extends Controller {
     * @memberof BaseController
     */
     getRouter(): any {
-        return AppComponent.getRouterFor(this);
+        return this.getOwnerAppComponent().getRouter();
+    }
+
+    /**
+    * Method for navigation to specific view
+    * @public
+    * @param {string} psTarget Parameter containing the string for the target navigation
+    * @param {Object.<string, string>} pmParameters? Parameters for navigation
+    * @param {boolean} pbReplace? Defines if the hash should be replaced (no browser history entry) or set (browser history entry)
+    */
+    navTo(psTarget: any, pmParameters?: any, pbReplace?: any) {
+        this.getRouter().navTo(psTarget, pmParameters, pbReplace);
     }
 
     getEventBus(): EventBus {
-        return this.getOwnerComponent().getEventBus();
+        
+        return this.getOwnerAppComponent().getEventBus();
     }
 
     getModel(sName?: string): JSONModel {
-        if (sName) {
-            return <JSONModel>this.getView().getModel(sName);
-        } else {
-            return <JSONModel>this.getView().getModel();
-        }
+        return <JSONModel>this.getView().getModel(sName);
     }
 
     /**
@@ -67,11 +81,15 @@ export default class BaseController extends Controller {
         return (<ResourceModel>this.getOwnerAppComponent().getModel("i18n")).getResourceBundle();
     }
 
+    /*i18n(sProperty: string) {
+        return this.getResourceBundle().getText(sProperty);
+    }*/
+
     onNavBack(): void {
         const sPreviousHash = History.getInstance().getPreviousHash();
 
         if (sPreviousHash !== undefined) {
-            history.go(-1);
+            window.history.back();
         } else {
             this.getRouter().navTo("master", {}, true /*no history*/);
         }
@@ -102,13 +120,9 @@ export default class BaseController extends Controller {
         oModel.refresh(true);
     }*/
 
-    /*onNavigate(oEvent) {
+    onNavigate(oEvent: Event) {
         //oEvent.preventDefault();
-    }*/
-
-    /*i18n(sProperty: string) {
-        return this.getResourceBundle().getText(sProperty);
-    }*/
+    }
 
     /*fnMetadataLoadingFailed() {
         var dialog = new Dialog({
@@ -132,59 +146,43 @@ export default class BaseController extends Controller {
         dialog.open();
     }*/
 
-    openFragment(sName: string, model: JSONModel, updateModelAlways: any, callback: any, data: any) {
+    async openFragment(sName: string, model: JSONModel, updateModelAlways: boolean, callback: any, data: {}) {
         if (sName.indexOf(".") > 0) {
             var aViewName = sName.split(".");
             sName = sName.substr(sName.lastIndexOf(".") + 1);
-        } else { //current folder
-            aViewName = this.getView().getViewName().split("."); // view.login.Login
+        } else {
+            aViewName = this.getView().getViewName().split(".");
         }
         aViewName.pop();
-        var sViewPath = aViewName.join("."); // view.login
-        if (sViewPath.toLowerCase().indexOf("fragments") > 0) {
+        var sViewPath = aViewName.join(".");
+        if (sViewPath.toLowerCase().indexOf("fragment") > 0) {
             sViewPath += ".";
         } else {
-            sViewPath += ".fragments.";
+            sViewPath += ".fragment.";
         }
-        var id: string = this.getView().getId() + "-" + sName;
-        if (_fragments[id] != undefined) {
-            
+        var id = this.getView().getId() + "-" + sName;
+        if (!_fragments[id]) {
             //create controller
             var sControllerPath = sViewPath.replace("view", "controller");
             let controller: any;
             try {
-                controller = Controller.extend(sControllerPath + sName);
+                controller = await Controller.create({
+                    name:sControllerPath + sName
+                });
             } catch (ex) {
                 controller = this;
             }
-
-            // _fragments[id] = {
-            //     fragment: sap.ui.xmlfragment(
-            //         id,
-            //         sViewPath + sName,
-            //         controller
-            //     ),
-            //     controller: controller
-            // };
-
-
-
             _fragments[id] = {
-                fragment: Fragment.load({
+                fragment: await Fragment.load({
                     id: id,
                     name: sViewPath + sName,
                     controller: controller
                 }),
                 controller: controller
             };
-
-
-
             if (model && !updateModelAlways) {
                 _fragments[id].fragment.setModel(model);
             }
-
-            // version >= 1.20.x
             this.getView().addDependent(_fragments[id].fragment);
         }
         var fragment = _fragments[id].fragment;
@@ -194,7 +192,6 @@ export default class BaseController extends Controller {
         if (_fragments[id].controller && _fragments[id].controller !== this) {
             _fragments[id].controller.onBeforeShow(this, fragment, callback, data);
         }
-
         setTimeout(function () {
             fragment.open();
         }, 100);

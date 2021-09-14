@@ -15,6 +15,12 @@
 					<Button
 						text="{i18n>btn_text}"
 						press="sayHello" />
+					<Button
+						text="Open Fragment"
+						press="onOpenFragment"/>
+					<Button
+						text="Next View"
+						press="onNextView"/>
 				</buttons>
 			</MessagePage>
 		</App>
