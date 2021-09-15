@@ -25,6 +25,6 @@ export default class AppController extends BaseController {
 		);
 	}
 	public onNextView() : void {
-		this.navTo("NextView");
+		this.navTo("RouteNextView");
 	}
 }

@@ -5,10 +5,8 @@
 	xmlns:mvc="sap.ui.core.mvc">
 	<Page
 		title="NextView"
-		showNavButton="true" >
-		<headerContent>
-			<Button icon="sap-icon://action" tooltip="Share" />
-		</headerContent>
+		showNavButton="true"
+		navButtonPress="onNavBack">
 		<content>
 			<VBox>
 				<Text text="Welcome to Next View"/>

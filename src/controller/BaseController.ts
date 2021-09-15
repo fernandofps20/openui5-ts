@@ -59,7 +59,6 @@ export default class BaseController extends Controller {
     }
 
     getEventBus(): EventBus {
-        
         return this.getOwnerAppComponent().getEventBus();
     }
 
@@ -92,7 +91,7 @@ export default class BaseController extends Controller {
         if (sPreviousHash !== undefined) {
             window.history.back();
         } else {
-            this.getRouter().navTo("master", {}, true /*no history*/);
+            this.getRouter().navTo("RouteApp", {}, true /*no history*/);
         }
     }
 
@@ -104,48 +103,9 @@ export default class BaseController extends Controller {
         return BusyIndicator.hide();
     }
 
-    /*updateModel: function (oModel, data, change) {
-        if (change == "added") {
-            oModel.getData().push(data);
-        } else if (change == "modified") {
-            var index = oModel.getData().map(function (data) {
-                return data.id;
-            }).indexOf(data.id);
-            oModel.getData()[index] = data;
-        } else if (change == "removed") {
-            var index = oModel.getData().map(function (data) {
-                return data.id;
-            }).indexOf(data.id);
-            oModel.getData().splice(index, 1);
-        }
-        oModel.refresh(true);
-    }*/
-
     onNavigate(oEvent: Event) {
         //oEvent.preventDefault();
     }
-
-    /*fnMetadataLoadingFailed() {
-        var dialog = new Dialog({
-            title: 'Error',
-            type: 'Message',
-            state: 'Error',
-            content: new Text({
-                text: 'Metadata loading failed. Please refresh you page.'
-            }),
-            beginButton: new Button({
-                text: 'OK',
-                press: function () {
-                    dialog.close();
-                }
-            }),
-            afterClose: function () {
-                dialog.destroy();
-            }
-        });
-
-        dialog.open();
-    }*/
 
     async openFragment(sName: string, model: JSONModel, updateModelAlways: boolean, callback: any, data: {}) {
         if (sName.indexOf(".") > 0) {
@@ -165,7 +125,7 @@ export default class BaseController extends Controller {
         if (!_fragments[id]) {
             //create controller
             var sControllerPath = sViewPath.replace("view", "controller");
-            let controller: any;
+            let controller: Controller;
             try {
                 controller = await Controller.create({
                     name:sControllerPath + sName
@@ -205,6 +165,45 @@ export default class BaseController extends Controller {
             }
         }
     }
+
+    /*fnMetadataLoadingFailed() {
+        var dialog = new Dialog({
+            title: 'Error',
+            type: 'Message',
+            state: 'Error',
+            content: new Text({
+                text: 'Metadata loading failed. Please refresh you page.'
+            }),
+            beginButton: new Button({
+                text: 'OK',
+                press: function () {
+                    dialog.close();
+                }
+            }),
+            afterClose: function () {
+                dialog.destroy();
+            }
+        });
+
+        dialog.open();
+    }*/
+
+    /*updateModel: function (oModel, data, change) {
+        if (change == "added") {
+            oModel.getData().push(data);
+        } else if (change == "modified") {
+            var index = oModel.getData().map(function (data) {
+                return data.id;
+            }).indexOf(data.id);
+            oModel.getData()[index] = data;
+        } else if (change == "removed") {
+            var index = oModel.getData().map(function (data) {
+                return data.id;
+            }).indexOf(data.id);
+            oModel.getData().splice(index, 1);
+        }
+        oModel.refresh(true);
+    }*/
 
     /*getFragmentControlById(parent, id) {
         var latest = this.getMetadata().getName().split(".")[this.getMetadata().getName().split(".").length - 1];

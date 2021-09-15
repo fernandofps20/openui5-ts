@@ -34,7 +34,7 @@
 			"viewName": "com.myorg.myapp.view.App",
 			"type": "XML",
 			"async": true,
-			"id": "App"
+			"id": "app"
 		},
 		"dependencies": {
 			"minUI5Version": "1.90.1",
@@ -49,6 +49,9 @@
 		"contentDensities": {
 			"compact": true,
 			"cozy": true
+		},
+		"config": {
+			"invoiceRemote": "https://services.odata.org/V2/Northwind/Northwind.svc/"
 		},
 		"models": {
 			"i18n": {
@@ -78,13 +81,13 @@
 			"routes": [
 				{
 					"name": "RouteApp",
-					"pattern": "RouteApp",
+					"pattern": "",
 					"target": ["TargetApp"]
 				},
 				{
-					"name": "NextView",
+					"name": "RouteNextView",
 					"pattern": "NextView",
-					"target": ["NextView"]
+					"target": ["TargetNextView"]
 				}
 			],
             "targets": {
@@ -94,7 +97,7 @@
 					"viewId": "App",
 					"viewName": "App"
 				},
-				"NextView": {
+				"TargetNextView": {
 					"viewType": "XML",
 					"transition": "slide",
 					"viewId": "NextView",
