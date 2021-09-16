@@ -19,3 +19,16 @@ server:
       extraExts: "xml,json,properties"
       port: 35729
       path: "webapp"
+builder:
+  customTasks:
+  - name: ui5-task-minify-xml
+    afterTask: replaceVersion
+    configuration:
+      minifyOptions:
+        removeComments: true
+        collapseEmptyElements: true
+        collapseWhitespaceInAttributeValues: true
+        # ... further minify-xml attributes
+      fileExtensions:
+      - "xml"
+      - "edmx"

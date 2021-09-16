@@ -1,7 +1,6 @@
 import UIComponent from "sap/ui/core/UIComponent";
 import { support } from "sap/ui/Device";
 import models from "./model/models";
-import ODataModel from "sap/ui/model/odata/v2/ODataModel";
 
 
 /**
