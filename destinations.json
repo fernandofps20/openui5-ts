@@ -1,0 +1,13 @@
+{
+    "sapui5": {
+        "Description": "SAPUI5 Resources",
+        "uri": "https://sapui5.hana.ondemand.com/"
+    },
+    "awesome_destination": {
+        "uri": "<sample-uri>",
+        "credentials": {
+            "user": "<username-to-basic-authentication>",
+            "password": "<password-to-basic-authentication>"
+        }
+    }
+}

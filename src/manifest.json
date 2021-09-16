@@ -47,11 +47,8 @@
 		},
 		"handleValidation": true,
 		"contentDensities": {
-			"compact": true,
-			"cozy": true
-		},
-		"config": {
-			"invoiceRemote": "https://services.odata.org/V2/Northwind/Northwind.svc/"
+			"compact": false,
+			"cozy": false
 		},
 		"models": {
 			"i18n": {
