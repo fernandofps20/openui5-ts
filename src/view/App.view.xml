@@ -21,6 +21,9 @@
 					<Button
 						text="Next View"
 						press="onNextView"/>
+					<Button
+						text="Show Busy Indicator"
+						press="onShowBusyIndicator"/>
 				</buttons>
 			</MessagePage>
 		</App>

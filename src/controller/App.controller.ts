@@ -27,4 +27,12 @@ export default class AppController extends BaseController {
 	public onNextView() : void {
 		this.navTo("RouteNextView");
 	}
+
+	public onShowBusyIndicator(): void {
+		const that = this;
+		this.showBusyIndicator();
+		setTimeout(function () {
+            that.hideBusyIndicator();
+        }, 5000);
+	}
 }
